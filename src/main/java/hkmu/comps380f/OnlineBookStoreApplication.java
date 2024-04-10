@@ -1,4 +1,4 @@
-package hkmu.comps380f.onlinebookstore;
+package hkmu.comps380f;
 
 import org.apache.catalina.Context;
 import org.apache.tomcat.util.descriptor.web.JspConfigDescriptorImpl;
