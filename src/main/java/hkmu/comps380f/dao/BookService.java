@@ -1,23 +1,19 @@
 package hkmu.comps380f.dao;
 
 import hkmu.comps380f.exception.BookNotFound;
-import hkmu.comps380f.exception.CoverNotFound;
 import hkmu.comps380f.model.Book;
-import hkmu.comps380f.model.Cover;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class BookService {
     @Resource
     private BookRepository bookRepo;
-    @Resource
-    private CoverRepository coverRepo;
 
     @Transactional
     public List<Book> getBooks() { return bookRepo.findAll(); }
@@ -31,23 +27,16 @@ public class BookService {
         return book;
     }
 
-    @Transactional
-    public Cover getCover(long bookId, UUID coverId) throws BookNotFound, CoverNotFound {
-        Book book = this.getBook(bookId);
-        Cover cover = coverRepo.findById(coverId).orElse(null);
-        if (cover == null) {
-            throw new CoverNotFound(coverId);
-        }
-        return cover;
-    }
-
-    public long addBook(String title, String author, String description, long price, int stock) throws IOException {
+    public long addBook(String title, String author, String description, long price, int stock, MultipartFile image) throws IOException {
         Book book = new Book();
         book.setTitle(title);
         book.setAuthor(author);
         book.setDescription(description);
         book.setPrice(price);
         book.setStock(stock);
+        book.setFilename(image.getOriginalFilename());
+        book.setMimeContentType(image.getContentType());
+        book.setContents(image.getBytes());
         Book savedBook = bookRepo.save(book);
         return savedBook.getId();
     }

@@ -18,6 +18,11 @@ public class Book {
     private String description;
     private long price;
     private int stock;
+    private String filename;
+    @Column(name = "contentType")
+    private String mimeContentType;
+    @Column(name = "image") @Basic(fetch = FetchType.LAZY) @Lob
+    private byte[] contents;
 
     public long getId() {
         return id;
@@ -65,5 +70,29 @@ public class Book {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getMimeContentType() {
+        return mimeContentType;
+    }
+
+    public void setMimeContentType(String mimeContentType) {
+        this.mimeContentType = mimeContentType;
+    }
+
+    public byte[] getContents() {
+        return contents;
+    }
+
+    public void setContents(byte[] contents) {
+        this.contents = contents;
     }
 }

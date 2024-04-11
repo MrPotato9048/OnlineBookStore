@@ -5,17 +5,10 @@ create table if not exists book (
                                     price long,
                                     description varchar(max),
                                     stock int,
+                                    filename varchar(255),
+                                    contentType varchar(255),
+                                    content blob,
                                     primary key (id)
-);
-
-create table if not exists bookCover (
-                                         id uuid default random_uuid() not null,
-                                         content blob,
-                                         contentType varchar(255),
-                                         filename varchar(255),
-                                         bookId bigint,
-                                         primary key (id),
-                                         foreign key (bookId) references book
 );
 
 create table if not exists users (

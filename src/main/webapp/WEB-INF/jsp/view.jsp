@@ -5,6 +5,7 @@
 <h2>Book: ${book.title}</h2>
 [<a href="<c:url value="/book/delete/${book.id}"/>">Delete</a>]<br/><br/>
 <i>Author: ${book.author}</i><br/>
+<img src="<c:url value="/book/image/${bookId}"/>"/>
 Description: <c:out value="${book.description}"/><br/>
 Price: ${book.price}<br/>
 <c:choose>

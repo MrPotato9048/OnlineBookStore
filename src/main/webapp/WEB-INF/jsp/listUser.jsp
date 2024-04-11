@@ -20,7 +20,7 @@
             <tr><th>Username</th><th>Password</th><th>Roles</th><th>Action</th></tr>
             <c:forEach items="${appUsers}" var="user"><tr>
                 <td>${user.username}</td>
-                <td>${fn:substringAfter(user.password, '{noop}')}</td>
+                <td>${user.password}</td>
                 <td>
                     <c:forEach items="${user.roles}" var="role" varStatus="status">
                         <c:if test="${!status.first}">, </c:if>

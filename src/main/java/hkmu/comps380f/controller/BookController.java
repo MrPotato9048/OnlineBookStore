@@ -2,21 +2,19 @@ package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.BookService;
 import hkmu.comps380f.exception.BookNotFound;
-import hkmu.comps380f.exception.CoverNotFound;
 import hkmu.comps380f.model.Book;
+import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
-import java.security.Principal;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequestMapping("/book")
@@ -36,6 +34,7 @@ public class BookController {
         private long price;
         private String description;
         private int stock;
+        private MultipartFile image;
 
         public String getTitle() {
             return title;
@@ -76,6 +75,14 @@ public class BookController {
         public void setStock(int stock) {
             this.stock = stock;
         }
+
+        public MultipartFile getImage() {
+            return image;
+        }
+
+        public void setImage(MultipartFile image) {
+            this.image = image;
+        }
     }
 
     @GetMapping("/create")
@@ -84,7 +91,7 @@ public class BookController {
     }
     @PostMapping("/create")
     public View create(BookForm form) throws IOException {
-        long bookId = bookService.addBook(form.getTitle(), form.getAuthor(), form.getDescription(), form.getPrice(), form.getStock());
+        long bookId = bookService.addBook(form.getTitle(), form.getAuthor(), form.getDescription(), form.getPrice(), form.getStock(), form.getImage());
         return new RedirectView("/book/view/" + bookId, true);
     }
 
@@ -96,7 +103,13 @@ public class BookController {
         return "view";
     }
 
-    @GetMapping("/edit/{bookId}")
+    @GetMapping("/image/{bookId}")
+    public View download(@PathVariable("bookId") long bookId) throws BookNotFound {
+        Book book = bookService.getBook(bookId);
+        return new DownloadingView(book.getFilename(), book.getMimeContentType(), book.getContents());
+    }
+
+    @GetMapping("/edit/{bookId}") // not sure if editing cover image should be added
     public ModelAndView showEdit(@PathVariable("bookId") long bookId, HttpServletRequest request) throws BookNotFound {
         Book book = bookService.getBook(bookId);
         if (book == null || !request.isUserInRole("ROLE_ADMIN")) {
@@ -128,7 +141,7 @@ public class BookController {
         return "redirect:/book/list";
     }
 
-    @ExceptionHandler({BookNotFound.class, CoverNotFound.class})
+    @ExceptionHandler({BookNotFound.class})
     public ModelAndView error(Exception e) {
         return new ModelAndView("error", "message", e.getMessage());
     }
