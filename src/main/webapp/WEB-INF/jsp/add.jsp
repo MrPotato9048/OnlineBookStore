@@ -14,7 +14,7 @@
     <form:input type="text" path="stock"/><br/><br/>
     <form:label path="price">Price</form:label><br/>
     <form:input type="text" path="price"/><br/><br/>
-    <form:label path="cover">Cover image</form:label><br/>
+    <form:label path="image">Cover image</form:label><br/>
     <form:input type="file" path="image" accept="image/*"/><br/><br/>
     <input type="submit" value="Submit"/>
 </form:form>

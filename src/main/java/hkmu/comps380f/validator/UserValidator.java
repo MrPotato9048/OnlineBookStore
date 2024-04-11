@@ -19,10 +19,10 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         UserForm user = (UserForm) o;
-        ValidationUtils.rejectIfEmpty(errors, "confirm_password", "",
+        ValidationUtils.rejectIfEmpty(errors, "confirmPassword", "",
                 "Please confirm your password.");
         if (!user.getPassword().equals(user.getConfirmPassword())) {
-            errors.rejectValue("confirm_password", "", "Password does not match.");
+            errors.rejectValue("confirmPassword", "", "Password does not match.");
         }
         if (user.getUsername().equals("")) {
             return;

@@ -25,7 +25,7 @@ public class UserManagementController {
 
     @GetMapping("/create")
     public ModelAndView create() {
-        return new ModelAndView("add", "appUser", new UserForm());
+        return new ModelAndView("addUser", "appUser", new UserForm());
     }
 
     public static class UserForm {
@@ -79,7 +79,7 @@ public class UserManagementController {
         userValidator.validate(form, result);
 
         if (result.hasErrors()) {
-            return "add";
+            return "addUser";
         }
 
         umService.createAppUser(form.getUsername(), form.getPassword(), form.getRoles());
@@ -88,7 +88,7 @@ public class UserManagementController {
     @GetMapping({"", "/", "/list"})
     public String list(ModelMap model) {
         model.addAttribute("appUsers", umService.getAppUsers());
-        return "list";
+        return "listUser";
     }
     @GetMapping("/delete/{username}")
     public String deleteAppUser(@PathVariable("username") String username) {

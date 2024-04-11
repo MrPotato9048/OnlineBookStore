@@ -3,7 +3,9 @@
 <head><title>Book - ${book.title}</title></head>
 <body>
 <h2>Book: ${book.title}</h2>
+<security:authorize access="hasRole('ADMIN')">
 [<a href="<c:url value="/book/delete/${book.id}"/>">Delete</a>]<br/><br/>
+</security:authorize>
 <i>Author: ${book.author}</i><br/>
 <img src="<c:url value="/book/image/${bookId}"/>"/>
 Description: <c:out value="${book.description}"/><br/>
