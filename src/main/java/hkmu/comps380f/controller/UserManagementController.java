@@ -2,9 +2,7 @@ package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.validator.UserValidator;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

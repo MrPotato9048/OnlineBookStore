@@ -19,6 +19,43 @@ Price: ${book.price}<br/>
     </c:otherwise>
 </c:choose>
 <br/><br/>
+Comments:<br/>
+<security:authorize access="hasAnyRole('USER', 'ADMIN')">
+    <form action="<c:url value='/comments/add/${book.id}'/>" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <label for="commentText">Add a comment:</label><br/>
+        <textarea id="commentText" name="commentText" rows="4" cols="50"></textarea><br/>
+        <input type="submit" value="Submit"/>
+    </form>
+</security:authorize>
+<c:choose>
+    <c:when test="${empty comments}">
+        No comments.<br/>
+    </c:when>
+    <c:otherwise>
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Comment</th>
+                <security:authorize access="hasRole('ADMIN')">
+                    <th>Delete</th>
+                </security:authorize>
+            </tr>
+            <c:forEach var="comment" items="${comments}">
+                <tr>
+                    <td><c:out value="${comment.appUser.username}"/></td>
+                    <td><c:out value="${comment.comment}"/></td>
+                    <security:authorize access="hasRole('ADMIN')">
+                        <td>
+                            <a href="<c:url value="/comments/delete/${book.id}/${comment.commentId}"/>">Delete</a>
+                        </td>
+                    </security:authorize>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:otherwise>
+</c:choose>
+<br/>
 <a href="<c:url value="/book" />">Return</a>
 </body>
 </html>

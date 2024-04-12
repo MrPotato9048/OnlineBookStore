@@ -1,6 +1,8 @@
 package hkmu.comps380f.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,9 @@ public class AppUser {
             this.roles.add(new UserRole(this, role));
         }
     }
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Comment> comments = new ArrayList<>();
 
     public String getUsername() {
         return username;
@@ -45,5 +50,13 @@ public class AppUser {
 
     public void setRoles(List<UserRole> roles) {
         this.roles = roles;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

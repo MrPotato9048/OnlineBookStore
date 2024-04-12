@@ -1,11 +1,15 @@
 package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.BookService;
+import hkmu.comps380f.dao.CommentService;
 import hkmu.comps380f.exception.BookNotFound;
 import hkmu.comps380f.model.Book;
+import hkmu.comps380f.model.Comment;
 import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +19,15 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/book")
 public class BookController {
     @Resource
     private BookService bookService;
+    @Resource
+    private CommentService commentService;
 
     @GetMapping(value = {"", "/list"})
     public String list(ModelMap model) {
@@ -95,11 +102,18 @@ public class BookController {
         return new RedirectView("/book/view/" + bookId, true);
     }
 
+    @Autowired
+    public BookController(CommentService commentService) {
+        this.commentService = commentService;
+    }
+    
     @GetMapping("/view/{bookId}")
     public String view(@PathVariable("bookId") long bookId, ModelMap model) throws BookNotFound {
         Book book = bookService.getBook(bookId);
+        List<Comment> comments = commentService.getComments(bookId);
         model.addAttribute("bookId", bookId);
         model.addAttribute("book", book);
+        model.addAttribute("comments", comments);
         return "view";
     }
 
