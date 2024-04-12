@@ -35,6 +35,12 @@ public class UserManagementController {
         private String confirmPassword;
         @NotEmpty(message = "Please select at least one role.")
         private String[] roles;
+        @NotEmpty(message = "Please enter your full name.")
+        private String fullName;
+        @NotEmpty(message = "Please enter your email address.")
+        private String emailAddress;
+        @NotEmpty(message = "Please enter your delivery address.")
+        private String deliveryAddress;
 
         public String getUsername() {
             return username;
@@ -67,6 +73,18 @@ public class UserManagementController {
         public void setConfirmPassword(String confirmPassword) {
             this.confirmPassword = confirmPassword;
         }
+
+        public String getFullName() { return fullName; }
+
+        public void setFullName(String fullName) { this.fullName = fullName; }
+
+        public String getEmailAddress() { return emailAddress; }
+
+        public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
+
+        public String getDeliveryAddress() { return deliveryAddress; }
+
+        public void setDeliveryAddress(String deliveryAddress) { this.deliveryAddress = deliveryAddress; }
     }
 
     @Autowired
@@ -80,7 +98,7 @@ public class UserManagementController {
             return "addUser";
         }
 
-        umService.createAppUser(form.getUsername(), form.getPassword(), form.getRoles());
+        umService.createAppUser(form.getUsername(), form.getPassword(), form.getRoles(), form.getFullName(), form.getEmailAddress(), form.getDeliveryAddress());
         return "redirect:/user/list";
     }
     @GetMapping({"", "/", "/list"})

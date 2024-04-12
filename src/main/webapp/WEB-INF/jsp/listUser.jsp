@@ -21,6 +21,9 @@
             <c:forEach items="${appUsers}" var="user"><tr>
                 <td>${user.username}</td>
                 <td>${user.password}</td>
+                <td>${user.fullName}</td>
+                <td>${user.emailAddress}</td>
+                <td>${user.deliveryAddress}</td>
                 <td>
                     <c:forEach items="${user.roles}" var="role" varStatus="status">
                         <c:if test="${!status.first}">, </c:if>

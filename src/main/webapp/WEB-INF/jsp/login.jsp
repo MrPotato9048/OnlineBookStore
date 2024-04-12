@@ -18,6 +18,9 @@
     <label for="remember-me">Remember me</label><br/><br/>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input type="submit" value="Log In"/>
+</form><br/>
+<form action="register" method="get">
+    <input type="submit" value="Register"/>
 </form>
 </body>
 </html>

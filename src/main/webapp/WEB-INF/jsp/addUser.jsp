@@ -26,6 +26,15 @@
     <form:label path="confirmPassword">Confirm Password</form:label><br/>
     <form:errors path="confirmPassword" cssClass="error" />
     <form:input type="text" path="confirmPassword" /><br/><br/>
+    <form:label path="fullName">Full Name</form:label><br/>
+    <form:errors path="fullName" cssClass="error" />
+    <form:input type="text" path="fullName" /><br/><br/>
+    <form:label path="emailAddress">Email Address</form:label><br/>
+    <form:errors path="emailAddress" cssClass="error" />
+    <form:input type="email" path="emailAddress" /><br/><br/>
+    <form:label path="deliveryAddress">Delivery Address</form:label><br/>
+    <form:errors path="deliveryAddress" cssClass="error" />
+    <form:input type="text" path="deliveryAddress" /><br/><br/>
     <form:label path="roles">Roles</form:label><br/>
     <form:errors path="roles" cssClass="error" />
     <form:checkbox path="roles" value="ROLE_USER"/>ROLE_USER

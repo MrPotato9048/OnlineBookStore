@@ -19,8 +19,8 @@ public class UserManagementService {
     private PasswordEncoder pe;
 
     @Transactional
-    public void createAppUser(String username, String password, String[] roles) {
-        AppUser user = new AppUser(username, pe.encode(password), roles);
+    public void createAppUser(String username, String password, String[] roles, String fullName, String emailAddress, String deliveryAddress) {
+        AppUser user = new AppUser(username, pe.encode(password), roles, fullName, emailAddress, deliveryAddress);
         appUserRepo.save(user);
     }
     @Transactional
@@ -41,7 +41,7 @@ public class UserManagementService {
     @PostConstruct
     public void init() {
         if (appUserRepo.count() == 0) {
-            AppUser user = new AppUser("testing", pe.encode("testing"), new String[]{"ROLE_ADMIN", "ROLE_USER"});
+            AppUser user = new AppUser("testing", pe.encode("testing"), new String[]{"ROLE_ADMIN", "ROLE_USER"}, "testing", "testing", "testing");
             appUserRepo.save(user);
         }
     }
