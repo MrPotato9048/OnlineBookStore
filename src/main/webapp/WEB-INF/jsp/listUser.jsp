@@ -17,7 +17,7 @@
     </c:when>
     <c:otherwise>
         <table>
-            <tr><th>Username</th><th>Password</th><th>Roles</th><th>Action</th></tr>
+            <tr><th>Username</th><th>Password</th><th>Full Name</th><th>Email Address</th><th>Delivery Address</th><th>Roles</th><th>Action</th></tr>
             <c:forEach items="${appUsers}" var="user"><tr>
                 <td>${user.username}</td>
                 <td>${user.password}</td>
