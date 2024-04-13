@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head><title>Book Store</title></head>
+<head>
+    <title>Online Book Store - Error ${status}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
 <body>
 <h2>Error page</h2>
 <c:choose>

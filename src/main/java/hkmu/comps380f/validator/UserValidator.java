@@ -12,6 +12,7 @@ import org.springframework.validation.Validator;
 public class UserValidator implements Validator {
     @Resource
     AppUserRepository appUserRepo;
+
     @Override
     public boolean supports(Class<?> type) {
         return UserForm.class.equals(type);

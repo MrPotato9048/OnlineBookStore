@@ -2,7 +2,9 @@ package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.BookService;
 import hkmu.comps380f.dao.CommentService;
+import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.exception.BookNotFound;
+import hkmu.comps380f.model.AppUser;
 import hkmu.comps380f.model.Book;
 import hkmu.comps380f.model.Comment;
 import hkmu.comps380f.view.DownloadingView;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -28,10 +31,13 @@ public class BookController {
     private BookService bookService;
     @Resource
     private CommentService commentService;
+    @Resource
+    private UserManagementService umService;
 
     @GetMapping(value = {"", "/list"})
-    public String list(ModelMap model) {
+    public String list(ModelMap model, Principal principal) {
         model.addAttribute("bookDatabase", bookService.getBooks());
+        model.addAttribute("principal", principal);
         return "list";
     }
 
@@ -93,7 +99,8 @@ public class BookController {
     }
 
     @GetMapping("/create")
-    public ModelAndView create() {
+    public ModelAndView create(ModelMap model, Principal principal) {
+        model.addAttribute("principal", principal);
         return new ModelAndView("add", "bookForm", new BookForm());
     }
     @PostMapping("/create")
@@ -108,9 +115,10 @@ public class BookController {
     }
     
     @GetMapping("/view/{bookId}")
-    public String view(@PathVariable("bookId") long bookId, ModelMap model) throws BookNotFound {
+    public String view(@PathVariable("bookId") long bookId, ModelMap model, Principal principal) throws BookNotFound {
         Book book = bookService.getBook(bookId);
         List<Comment> comments = commentService.getComments(bookId);
+        model.addAttribute("principal", principal);
         model.addAttribute("bookId", bookId);
         model.addAttribute("book", book);
         model.addAttribute("comments", comments);
@@ -124,12 +132,12 @@ public class BookController {
     }
 
     @GetMapping("/edit/{bookId}") // not sure if editing cover image should be added
-    public ModelAndView showEdit(@PathVariable("bookId") long bookId, HttpServletRequest request) throws BookNotFound {
+    public ModelAndView showEdit(@PathVariable("bookId") long bookId, HttpServletRequest request, Principal principal, ModelMap model) throws BookNotFound {
         Book book = bookService.getBook(bookId);
         if (book == null || !request.isUserInRole("ROLE_ADMIN")) {
             return new ModelAndView(new RedirectView("/book/list", true));
         }
-        ModelAndView modelAndView = new ModelAndView("book/edit");
+        ModelAndView modelAndView = new ModelAndView("edit");
         modelAndView.addObject("book", book);
         BookForm bookForm = new BookForm();
         bookForm.setTitle(book.getTitle());
@@ -137,6 +145,8 @@ public class BookController {
         bookForm.setDescription(book.getDescription());
         bookForm.setPrice(book.getPrice());
         bookForm.setStock(book.getStock());
+        modelAndView.addObject("bookForm", bookForm);
+        model.addAttribute("principal", principal);
         return modelAndView;
     }
     @PostMapping("/edit/{bookId}")

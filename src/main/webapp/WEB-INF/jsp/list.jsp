@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head><title>Book Store</title></head>
+<head>
+    <title>Online Book Store - Book List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
 <body>
-<c:url var="logoutUrl" value="/logout" />
-<form action="${logoutUrl}" method="post">
-    <input type="submit" value="Logout" />
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-</form>
-
+<nav>
+    <c:url var="logoutUrl" value="/logout" />
+    <form action="${logoutUrl}" method="post">
+        <input type="submit" value="Logout" />
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    </form>
+    
+    <security:authorize access="isAuthenticated()">
+        <c:url var="userUrl" value="/user/own/${principal.name}" />
+        <a href="${userUrl}">User Page</a>
+    </security:authorize>
+</nav>
 <h2>Books</h2>
 <security:authorize access="hasRole('ADMIN')">
     <a href="<c:url value="/user/" />">Manage User Accounts</a><br/><br/>
+    <a href="<c:url value="/book/create" />">Add a Book</a><br/><br/>
 </security:authorize>
-<a href="<c:url value="/book/create" />">Add a Book</a><br/><br/>
 <c:choose>
     <c:when test="${fn:length(bookDatabase) == 0}">
         <i>There are no books in the store.</i>

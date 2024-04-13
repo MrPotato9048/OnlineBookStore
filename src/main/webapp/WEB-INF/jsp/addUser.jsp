@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Book Store</title>
+    <title>Online Book Store - Add User</title>
     <style>
         .error {
             color: red;
@@ -9,6 +9,7 @@
             display: block;
         }
     </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
 <c:url var="logoutUrl" value="/logout"/>

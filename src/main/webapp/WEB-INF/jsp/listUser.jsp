@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head><title>Book Store User Management</title></head>
+<head>
+    <title>Online Book Store - User Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
 <body>
 <c:url var="logoutUrl" value="/logout"/>
 <form action="${logoutUrl}" method="post">
@@ -19,7 +22,7 @@
         <table>
             <tr><th>Username</th><th>Password</th><th>Full Name</th><th>Email Address</th><th>Delivery Address</th><th>Roles</th><th>Action</th></tr>
             <c:forEach items="${appUsers}" var="user"><tr>
-                <td>${user.username}</td>
+                <td><a href="<c:url value='/user/edit/${user.username}' />">${user.username}</a></td>
                 <td>${user.password}</td>
                 <td>${user.fullName}</td>
                 <td>${user.emailAddress}</td>
@@ -31,7 +34,8 @@
                     </c:forEach>
                 </td>
                 <td>[<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]</td>
-            </tr></c:forEach>
+            </tr>
+            </c:forEach>
         </table>
     </c:otherwise>
 </c:choose>

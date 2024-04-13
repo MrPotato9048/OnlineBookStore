@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head><title>Book Store Login</title></head>
+<head>
+    <title>Online Book Store - Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
 <body>
 <c:if test="${param.error != null}">
     <p>Login failed.</p>

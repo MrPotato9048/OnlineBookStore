@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head><title>Book - ${book.title}</title></head>
+<head>
+    <title>Online Book Store - ${book.title}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
 <body>
+<nav>
+    <c:url var="logoutUrl" value="/logout" />
+    <form action="${logoutUrl}" method="post">
+        <input type="submit" value="Logout" />
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    </form>
+
+    <security:authorize access="isAuthenticated()">
+        <c:url var="userUrl" value="/user/own/${principal.name}" />
+        <a href="${userUrl}">User Page</a>
+    </security:authorize>
+</nav>
 <h2>Book: ${book.title}</h2>
 <security:authorize access="hasRole('ADMIN')">
-[<a href="<c:url value="/book/delete/${book.id}"/>">Delete</a>]<br/><br/>
+    [<a href="<c:url value="/book/delete/${book.id}"/>">Delete</a>]<br/><br/>
+    [<a href="<c:url value="/book/edit/${book.id}"/>">Edit</a>]<br/><br/>
 </security:authorize>
 <i>Author: ${book.author}</i><br/>
-<img src="<c:url value="/book/image/${bookId}"/>"/>
+<img src="<c:url value='/book/image/${bookId}'/>" class="img-fluid" style="max-width: 300px; max-height: 300px;"/><br/>
 Description: <c:out value="${book.description}"/><br/>
 Price: ${book.price}<br/>
 <c:choose>

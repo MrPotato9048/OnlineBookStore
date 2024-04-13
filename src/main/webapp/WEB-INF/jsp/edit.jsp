@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head><title>Book Store</title></head>
+<head>
+    <title>Online Book Store - Edit Book</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
 <body>
-<c:url var="logoutUrl" value="/logout"/>
-<form action="${logoutUrl}" method="post">
-    <input type="submit" value="Log out"/>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
+<nav>
+    <c:url var="logoutUrl" value="/logout" />
+    <form action="${logoutUrl}" method="post">
+        <input type="submit" value="Logout" />
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    </form>
+
+    <security:authorize access="isAuthenticated()">
+        <c:url var="userUrl" value="/user/own/${principal.name}" />
+        <a href="${userUrl}">User Page</a>
+    </security:authorize>
+</nav>
 <h2>Edit Book #${book.id}</h2>
 <form:form method="POST" enctype="multipart/form-data" modelAttribute="bookForm">
     <form:label path="title">Title</form:label><br/>
