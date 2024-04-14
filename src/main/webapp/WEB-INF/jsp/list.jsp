@@ -6,11 +6,20 @@
 </head>
 <body>
 <nav>
-    <c:url var="logoutUrl" value="/logout" />
-    <form action="${logoutUrl}" method="post">
-        <input type="submit" value="Logout" />
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    </form>
+    <security:authorize access="isAuthenticated()">
+        <c:url var="logoutUrl" value="/logout" />
+        <form action="${logoutUrl}" method="post">
+            <input type="submit" value="Logout" />
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        </form>
+    </security:authorize>
+
+    <security:authorize access="isAnonymous()">
+        <c:url var="loginUrl" value="/login" />
+        <form action="${loginUrl}" method="get">
+            <input type="submit" value="Login" />
+        </form>
+    </security:authorize>
     
     <security:authorize access="isAuthenticated()">
         <c:url var="userUrl" value="/user/own/${principal.name}" />

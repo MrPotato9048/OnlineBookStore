@@ -6,11 +6,20 @@
 </head>
 <body>
 <nav>
-    <c:url var="logoutUrl" value="/logout" />
-    <form action="${logoutUrl}" method="post">
-        <input type="submit" value="Logout" />
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    </form>
+    <security:authorize access="isAuthenticated()">
+        <c:url var="logoutUrl" value="/logout" />
+        <form action="${logoutUrl}" method="post">
+            <input type="submit" value="Logout" />
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        </form>
+    </security:authorize>
+
+    <security:authorize access="isAnonymous()">
+        <c:url var="loginUrl" value="/login" />
+        <form action="${loginUrl}" method="get">
+            <input type="submit" value="Login" />
+        </form>
+    </security:authorize>
 
     <security:authorize access="isAuthenticated()">
         <c:url var="userUrl" value="/user/own/${principal.name}" />
@@ -34,29 +43,27 @@ Price: ${book.price}<br/>
         In stock
     </c:otherwise>
 </c:choose>
-
-
-
-<c:choose>
-    <c:when test="${isFavorite}">
-        <form action="<c:url value='/favorite/remove/${book.id}'/>" method="post">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <input type="submit" value="Remove from Favorites"/>
-        </form>
-    </c:when>
-    <c:otherwise>
-        <form action="<c:url value='/favorite/add/${book.id}'/>" method="post">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <input type="submit" value="Add to Favorites"/>
-        </form>
-    </c:otherwise>
-</c:choose>
-
-
+<br/>
+<security:authorize access="isAuthenticated()">
+    <c:choose>
+        <c:when test="${isFavorite}">
+            <form action="<c:url value='/favorite/remove/${book.id}'/>" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <input type="submit" value="Remove from Favorites"/>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <form action="<c:url value='/favorite/add/${book.id}'/>" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <input type="submit" value="Add to Favorites"/>
+            </form>
+        </c:otherwise>
+    </c:choose>
+</security:authorize>
 
 <br/><br/>
 Comments:<br/>
-<security:authorize access="hasAnyRole('USER', 'ADMIN')">
+<security:authorize access="isAuthenticated()">
     <form action="<c:url value='/comments/add/${book.id}'/>" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <label for="commentText">Add a comment:</label><br/>
@@ -69,14 +76,7 @@ Comments:<br/>
         No comments.<br/>
     </c:when>
     <c:otherwise>
-        <table>
-            <tr>
-                <th>User</th>
-                <th>Comment</th>
-                <security:authorize access="hasRole('ADMIN')">
-                    <th>Delete</th>
-                </security:authorize>
-            </tr>
+        <table class="table table-bordered">
             <c:forEach var="comment" items="${comments}">
                 <tr>
                     <td><c:out value="${comment.appUser.username}"/></td>

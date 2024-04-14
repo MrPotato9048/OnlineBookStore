@@ -121,8 +121,11 @@ public class BookController {
     public String view(@PathVariable("bookId") long bookId, ModelMap model, Principal principal) throws BookNotFound {
         Book book = bookService.getBook(bookId);
         List<Comment> comments = commentService.getComments(bookId);
-        boolean isFavorite = favoriteBookService.isFavoriteBook(bookId, principal.getName());
-        model.addAttribute("principal", principal);
+        boolean isFavorite = false;
+        if (principal != null) {
+            isFavorite = favoriteBookService.isFavoriteBook(bookId, principal.getName());
+            model.addAttribute("principal", principal);
+        }
         model.addAttribute("bookId", bookId);
         model.addAttribute("book", book);
         model.addAttribute("comments", comments);
