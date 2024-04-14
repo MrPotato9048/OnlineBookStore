@@ -34,6 +34,17 @@ public class AppUser {
     @Fetch(FetchMode.SUBSELECT)
     private List<Comment> comments = new ArrayList<>();
 
+
+
+
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Favorite> favoriteBooks = new ArrayList<>();
+
+
+
+
+
     public String getUsername() {
         return username;
     }

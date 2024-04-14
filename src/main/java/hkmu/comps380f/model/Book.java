@@ -29,6 +29,16 @@ public class Book {
     @Fetch(FetchMode.SUBSELECT)
     private List<Comment> comments = new ArrayList<>();
 
+
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Favorite> favoriteBooks = new ArrayList<>();
+
+
+
+
+
     public long getId() {
         return id;
     }

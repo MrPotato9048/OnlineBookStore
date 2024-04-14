@@ -2,6 +2,7 @@ package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.BookService;
 import hkmu.comps380f.dao.CommentService;
+import hkmu.comps380f.dao.FavoriteBookService;
 import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.exception.BookNotFound;
 import hkmu.comps380f.model.AppUser;
@@ -33,6 +34,8 @@ public class BookController {
     private CommentService commentService;
     @Resource
     private UserManagementService umService;
+    @Resource
+    private FavoriteBookService favoriteBookService;
 
     @GetMapping(value = {"", "/list"})
     public String list(ModelMap model, Principal principal) {
@@ -118,10 +121,12 @@ public class BookController {
     public String view(@PathVariable("bookId") long bookId, ModelMap model, Principal principal) throws BookNotFound {
         Book book = bookService.getBook(bookId);
         List<Comment> comments = commentService.getComments(bookId);
+        boolean isFavorite = favoriteBookService.isFavoriteBook(bookId, principal.getName());
         model.addAttribute("principal", principal);
         model.addAttribute("bookId", bookId);
         model.addAttribute("book", book);
         model.addAttribute("comments", comments);
+        model.addAttribute("isFavorite", isFavorite);
         return "view";
     }
 

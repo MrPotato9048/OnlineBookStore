@@ -34,6 +34,26 @@ Price: ${book.price}<br/>
         In stock
     </c:otherwise>
 </c:choose>
+
+
+
+<c:choose>
+    <c:when test="${isFavorite}">
+        <form action="<c:url value='/favorite/remove/${book.id}'/>" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="submit" value="Remove from Favorites"/>
+        </form>
+    </c:when>
+    <c:otherwise>
+        <form action="<c:url value='/favorite/add/${book.id}'/>" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="submit" value="Add to Favorites"/>
+        </form>
+    </c:otherwise>
+</c:choose>
+
+
+
 <br/><br/>
 Comments:<br/>
 <security:authorize access="hasAnyRole('USER', 'ADMIN')">

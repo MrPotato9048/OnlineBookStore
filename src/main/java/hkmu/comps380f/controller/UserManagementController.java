@@ -1,7 +1,9 @@
 package hkmu.comps380f.controller;
 
+import hkmu.comps380f.dao.FavoriteBookService;
 import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.model.AppUser;
+import hkmu.comps380f.model.Favorite;
 import hkmu.comps380f.model.UserRole;
 import hkmu.comps380f.validator.UserValidator;
 import jakarta.annotation.Resource;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +31,9 @@ import java.util.stream.Collectors;
 public class UserManagementController {
     @Resource
     private UserManagementService umService;
+
+    @Resource
+    private FavoriteBookService fbService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -213,6 +219,8 @@ public class UserManagementController {
         if (appUser == null) {
             return "redirect:/user/list";
         }
+        List<Favorite> favoriteBooks = fbService.getFavoriteBooksByUsername(username);
+        model.addAttribute("favoriteBooks", favoriteBooks);
         model.addAttribute("appUser", appUser);
         model.addAttribute("principal", principal);
         return "viewUser";

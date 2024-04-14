@@ -18,6 +18,8 @@
     </security:authorize>
 </nav>
 
+
+
 <h1>${appUser.fullName}'s User Page</h1>
 [<a href="<c:url value="/user/edit/${principal.name}"/>">Edit</a>]
 <p><strong>Username:</strong> ${appUser.username}</p>
@@ -31,5 +33,21 @@
         </c:forEach>
     </ul>
 </security:authorize>
+
+
+
+
+<p><strong>Favorite Books:</strong><br/>
+<c:choose>
+    <c:when test="${fn:length(favoriteBooks) == 0}">
+    <i>There are no books in the favorite Books.</i>
+    </c:when>
+    <c:otherwise>
+        <c:forEach items="${favoriteBooks}" var="favoriteBook">
+                <li>${favoriteBook.book.title}</li>
+        </c:forEach>
+    </c:otherwise>
+</c:choose>
+
 </body>
 </html>
