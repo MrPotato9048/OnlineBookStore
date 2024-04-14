@@ -20,7 +20,6 @@ public class OrdersController {
 
     @GetMapping
     public String getOrders(Model model, Principal principal) {
-        System.out.println("Processing getOrders. Principal: " + principal.getName());
         List<Order> orders = orderService.getOrders(principal.getName());
         model.addAttribute("orders", orders);
         model.addAttribute("principal", principal);

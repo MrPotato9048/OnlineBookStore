@@ -67,7 +67,7 @@
             </tr>
             <tr>
                 <th>Price</th>
-                <td>${book.price}</td>
+                <td>$${book.price}</td>
             </tr>
         </tbody>
     </table>

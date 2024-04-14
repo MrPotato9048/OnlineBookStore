@@ -59,12 +59,12 @@
                     <tr>
                         <td>${item.book.title}</td>
                         <td>${item.quantity}</td>
-                        <td>${item.totalPrice}</td>
+                        <td>$${item.totalPrice}</td>
                     </tr>
                 </c:forEach>
                 <tr>
                     <th colspan="2">Total:</th>
-                    <td>${totalPrice}</td>
+                    <td>$${totalPrice}</td>
                     <td></td>
                 </tr>
             </table>

@@ -70,8 +70,7 @@ public class ShoppingCartService {
 
     public void clearShoppingCart(String username) {
         ShoppingCart shoppingCart = getShoppingCart(username);
-        List<ShoppingCartItem> shoppingCartItems = shoppingCart.getShoppingCartItems();
-        shoppingCartItems.clear();
+        shoppingCart.getShoppingCartItems().clear();
         shoppingCartRepo.save(shoppingCart);
     }
 }

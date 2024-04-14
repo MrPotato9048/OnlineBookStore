@@ -1,16 +1,10 @@
 package hkmu.comps380f.controller;
-import hkmu.comps380f.dao.CheckoutRepository;
-import hkmu.comps380f.dao.OrderService;
-import hkmu.comps380f.dao.ShoppingCartItemRepository;
-import hkmu.comps380f.dao.ShoppingCartService;
-import hkmu.comps380f.model.Order;
-import hkmu.comps380f.model.ShoppingCart;
-import hkmu.comps380f.model.ShoppingCartItem;
+import hkmu.comps380f.dao.*;
+import hkmu.comps380f.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import hkmu.comps380f.model.CheckoutModel;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -31,6 +25,8 @@ public class ShoppingCartController {
     private ShoppingCartItemRepository shoppingCartItemRepo;
     @Autowired
     private CheckoutRepository checkoutRepo;
+    @Autowired
+    private BookRepository bookRepo;
 
     @GetMapping
     public String getShoppingCart(Model model, Principal principal) {
@@ -107,6 +103,14 @@ public class ShoppingCartController {
         List<ShoppingCartItem> checkoutItems = new ArrayList<>(shoppingCartItems);
         CheckoutModel checkoutModel = new CheckoutModel(principal.getName(), checkoutItems, totalPrice, new Date());
         orderService.createOrder(checkoutModel);
+
+        for (ShoppingCartItem item : shoppingCartItems) {
+            Book book = item.getBook();
+            int newStock = book.getStock() - item.getQuantity();
+            book.setStock(newStock);
+            bookRepo.save(book);
+        }
+    
         shoppingCartService.clearShoppingCart(principal.getName());
         return "redirect:/orders";
     }

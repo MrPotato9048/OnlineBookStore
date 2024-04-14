@@ -28,9 +28,9 @@ public class OrderService {
         order.setTotalPrice(checkoutModel.getTotalPrice());
         order.setCheckoutDate(checkoutModel.getCheckoutDate());
     
-        order = orderRepo.save(order);
-    
         order.setOrderItems(convertToOrderItems(checkoutModel.getShoppingCartItems(), order));
+    
+        order = orderRepo.save(order);
     
         return order;
     }

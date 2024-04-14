@@ -7,7 +7,7 @@ import java.util.List;
 @Table(name = "CustomerOrder")
 public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long OrderId;
+    private long orderId;
 
     @ManyToOne
     @JoinColumn(name = "username", nullable = false)
@@ -21,11 +21,11 @@ public class Order {
     private Date checkoutDate;
 
     public long getOrderId() {
-        return OrderId;
+        return orderId;
     }
 
     public void setOrderId(long orderId) {
-        OrderId = orderId;
+        this.orderId = orderId;
     }
 
     public AppUser getAppUser() {

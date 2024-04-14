@@ -47,26 +47,24 @@
         <h2>Your Orders</h2>
         <c:if test="${not empty orders}">
             <c:forEach items="${orders}" var="order">
-                <h3>Order ID: ${order.id}</h3>
-                <p>Date: <fmt:formatDate value="${order.date}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                <h3>Order ID: ${order.orderId}</h3>
+                <p>Date: <fmt:formatDate value="${order.checkoutDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
                 <table class="table">
                     <thead>
                     <tr>
                         <th>Book</th>
                         <th>Quantity</th>
-                        <th>Total Price</th>
                     </tr>
                     </thead>
-                    <c:forEach items="${order.shoppingCartItems}" var="item">
+                    <c:forEach items="${order.orderItems}" var="item">
                         <tr>
                             <td>${item.book.title}</td>
                             <td>${item.quantity}</td>
-                            <td><${item.totalPrice}</td>
                         </tr>
                     </c:forEach>
                     <tr>
-                        <th colspan="2">Order Total:</th>
-                        <td>${order.totalPrice}</td>
+                        <th>Order Total:</th>
+                        <td>$${order.totalPrice}</td>
                     </tr>
                 </table>
             </c:forEach>

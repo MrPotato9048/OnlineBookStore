@@ -60,7 +60,7 @@
                     <tr>
                         <td>${item.book.title}</td>
                         <td>${item.quantity}</td>
-                        <td>${itemTotalPrices[status.index]}</td>
+                        <td>$${itemTotalPrices[status.index]}</td>
                         <td>
                             <form action="<c:url value='/shoppingCart/remove/${item.book.id}' />" method="post">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -71,7 +71,7 @@
                 </c:forEach>
                 <tr>
                     <th colspan="2">Total</th>
-                    <td>${totalPrice}</td>
+                    <td>$${totalPrice}</td>
                     <td></td>
                 </tr>
                 </tbody>
