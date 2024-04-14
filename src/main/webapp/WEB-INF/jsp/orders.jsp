@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Online Book Store - Book List</title>
+    <title>Online Book Store - Order</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .card-img-top {
-            object-fit: cover;
-            height: 15rem;
-        }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -49,41 +43,40 @@
     </div>
 </nav>
 <div class="container">
-    <h2>Books</h2>
-    <security:authorize access="hasRole('ADMIN')">
-        <a href="<c:url value="/user/" />" class="btn btn-primary">Manage User Accounts</a><br/><br/>
-        <a href="<c:url value="/book/create" />" class="btn btn-success">Add a Book</a><br/><br/>
-    </security:authorize>
-    <c:choose>
-        <c:when test="${fn:length(bookDatabase) == 0}">
-            <i>There are no books in the store.</i>
-        </c:when>
-        <c:otherwise>
-            <div class="card-deck">
-                <c:forEach items="${bookDatabase}" var="entry" varStatus="loop">
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <a href="<c:url value="/book/view/${entry.id}"/>">
-                                <img src="<c:url value='/book/image/${entry.id}'/>" class="card-img-top img-fluid" alt="${entry.title}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${entry.title}</h5>
-                                </div>
-                            </a>
-                            <security:authorize access="hasRole('ADMIN')">
-                                <div class="card-footer">
-                                    <a href="<c:url value="/book/edit/${entry.id}"/>" class="btn btn-primary">Edit</a>
-                                    <a href="<c:url value="/book/delete/${entry.id}"/>" class="btn btn-danger">Delete</a>
-                                </div>
-                            </security:authorize>
-                        </div>
-                    </div>
-                    <c:if test="${loop.index % 3 == 2}">
-                        </div><div class="card-deck">
-                    </c:if>
-                </c:forEach>
+    <div class="d-flex flex-column">
+        <h2>Your Orders</h2>
+        <c:if test="${not empty orders}">
+            <c:forEach items="${orders}" var="order">
+                <h3>Order ID: ${order.id}</h3>
+                <p>Date: <fmt:formatDate value="${order.date}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                    </tr>
+                    </thead>
+                    <c:forEach items="${order.shoppingCartItems}" var="item">
+                        <tr>
+                            <td>${item.book.title}</td>
+                            <td>${item.quantity}</td>
+                            <td><${item.totalPrice}</td>
+                        </tr>
+                    </c:forEach>
+                    <tr>
+                        <th colspan="2">Order Total:</th>
+                        <td>${order.totalPrice}</td>
+                    </tr>
+                </table>
+            </c:forEach>
+        </c:if>
+        <c:if test="${empty orders}">
+            <div class="mt-auto">
+                <p class="text-muted">You have no orders.</p>
             </div>
-        </c:otherwise>
-    </c:choose>
+        </c:if>
+    </div>
 </div>
 </body>
 </html>

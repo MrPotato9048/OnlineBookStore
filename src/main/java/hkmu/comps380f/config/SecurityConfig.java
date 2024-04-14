@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/user/update").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/user/own/**", "/user/edit/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/user/own/**", "/user/edit/**", "/orders", "/shoppingCarts/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/user/list", "/user/create", "/user/delete/").hasRole("ADMIN")
                         .requestMatchers("/book/delete/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/book/create", "/book/edit").hasRole("ADMIN")

@@ -25,6 +25,14 @@
                     <a class="nav-link" href="${userUrl}">User Page</a>
                 </li>
                 <li class="nav-item">
+                    <c:url var="cartUrl" value="/shoppingCart" />
+                    <a class="nav-link" href="${cartUrl}">Shopping Cart</a>
+                </li>
+                <li class="nav-item">
+                    <c:url var="ordersUrl" value="/orders" />
+                    <a class="nav-link" href="${ordersUrl}">Orders</a>
+                </li>
+                <li class="nav-item">
                     <c:url var="logoutUrl" value="/logout" />
                     <form class="form-inline" action="${logoutUrl}" method="post">
                         <input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Logout" />
@@ -42,7 +50,7 @@
     </div>
 </nav>
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-md-6">
             <h2 class="text-center">Add User</h2>
             <form:form method="POST" modelAttribute="appUser" class="d-flex flex-column align-items-start">

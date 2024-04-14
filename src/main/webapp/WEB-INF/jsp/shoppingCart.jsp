@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Online Book Store - Book List</title>
+    <title>Online Book Store - Order</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .card-img-top {
-            object-fit: cover;
-            height: 15rem;
-        }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -49,41 +43,49 @@
     </div>
 </nav>
 <div class="container">
-    <h2>Books</h2>
-    <security:authorize access="hasRole('ADMIN')">
-        <a href="<c:url value="/user/" />" class="btn btn-primary">Manage User Accounts</a><br/><br/>
-        <a href="<c:url value="/book/create" />" class="btn btn-success">Add a Book</a><br/><br/>
-    </security:authorize>
-    <c:choose>
-        <c:when test="${fn:length(bookDatabase) == 0}">
-            <i>There are no books in the store.</i>
-        </c:when>
-        <c:otherwise>
-            <div class="card-deck">
-                <c:forEach items="${bookDatabase}" var="entry" varStatus="loop">
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <a href="<c:url value="/book/view/${entry.id}"/>">
-                                <img src="<c:url value='/book/image/${entry.id}'/>" class="card-img-top img-fluid" alt="${entry.title}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${entry.title}</h5>
-                                </div>
-                            </a>
-                            <security:authorize access="hasRole('ADMIN')">
-                                <div class="card-footer">
-                                    <a href="<c:url value="/book/edit/${entry.id}"/>" class="btn btn-primary">Edit</a>
-                                    <a href="<c:url value="/book/delete/${entry.id}"/>" class="btn btn-danger">Delete</a>
-                                </div>
-                            </security:authorize>
-                        </div>
-                    </div>
-                    <c:if test="${loop.index % 3 == 2}">
-                        </div><div class="card-deck">
-                    </c:if>
+    <div class="d-flex flex-column">
+        <h2>Your Shopping Cart</h2>
+        <c:if test="${not empty shoppingCart.shoppingCartItems}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Book</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${shoppingCart.shoppingCartItems}" var="item" varStatus="status">
+                    <tr>
+                        <td>${item.book.title}</td>
+                        <td>${item.quantity}</td>
+                        <td>${itemTotalPrices[status.index]}</td>
+                        <td>
+                            <form action="<c:url value='/shoppingCart/remove/${item.book.id}' />" method="post">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
                 </c:forEach>
+                <tr>
+                    <th colspan="2">Total</th>
+                    <td>${totalPrice}</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            <form action="<c:url value='/shoppingCart/checkout' />" method="get">
+                <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
+            </form>
+        </c:if>
+        <c:if test="${empty shoppingCart.shoppingCartItems}">
+            <div class="mt-auto">
+                <p class="text-muted">Your shopping cart is empty.</p>
             </div>
-        </c:otherwise>
-    </c:choose>
+        </c:if>
+    </div>
 </div>
 </body>
 </html>

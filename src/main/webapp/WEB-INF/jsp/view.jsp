@@ -18,6 +18,14 @@
                     <a class="nav-link" href="${userUrl}">User Page</a>
                 </li>
                 <li class="nav-item">
+                    <c:url var="cartUrl" value="/shoppingCart" />
+                    <a class="nav-link" href="${cartUrl}">Shopping Cart</a>
+                </li>
+                <li class="nav-item">
+                    <c:url var="ordersUrl" value="/orders" />
+                    <a class="nav-link" href="${ordersUrl}">Orders</a>
+                </li>
+                <li class="nav-item">
                     <c:url var="logoutUrl" value="/logout" />
                     <form class="form-inline" action="${logoutUrl}" method="post">
                         <input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Logout" />
@@ -76,20 +84,27 @@
         </c:otherwise>
     </c:choose>
     <security:authorize access="isAuthenticated()">
-        <c:choose>
-            <c:when test="${isFavorite}">
-                <form action="<c:url value='/favorite/remove/${book.id}'/>" method="post">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <input type="submit" value="Remove from Favorites" class="btn btn-secondary"/>
-                </form>
-            </c:when>
-            <c:otherwise>
-                <form action="<c:url value='/favorite/add/${book.id}'/>" method="post">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <input type="submit" value="Add to Favorites" class="btn btn-primary"/>
-                </form>
-            </c:otherwise>
-        </c:choose>
+        <div style="display: flex; justify-content: space-between;">
+            <form action="<c:url value='/shoppingCart/add/${book.id}'/>" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <input type="hidden" name="quantity" value="1"/>
+                <input type="submit" value="Add to Cart" class="btn btn-primary"/>
+            </form>
+            <c:choose>
+                <c:when test="${isFavorite}">
+                    <form action="<c:url value='/favorite/remove/${book.id}'/>" method="post">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        <input type="submit" value="Remove from Favorites" class="btn btn-secondary"/>
+                    </form>
+                </c:when>
+                <c:otherwise>
+                    <form action="<c:url value='/favorite/add/${book.id}'/>" method="post">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        <input type="submit" value="Add to Favorites" class="btn btn-primary"/>
+                    </form>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </security:authorize>
     <br/><br/>
     <h2>Comments:</h2>
