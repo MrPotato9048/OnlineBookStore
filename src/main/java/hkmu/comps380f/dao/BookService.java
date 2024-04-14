@@ -2,6 +2,7 @@ package hkmu.comps380f.dao;
 
 import hkmu.comps380f.exception.BookNotFound;
 import hkmu.comps380f.model.Book;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

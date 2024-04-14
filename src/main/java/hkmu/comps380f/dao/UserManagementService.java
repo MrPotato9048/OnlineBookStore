@@ -74,8 +74,10 @@ public class UserManagementService {
     @PostConstruct
     public void init() {
         if (appUserRepo.count() == 0) {
-            AppUser user = new AppUser("testing", pe.encode("testing"), new String[]{"ROLE_ADMIN", "ROLE_USER"}, "testing", "testing", "testing");
-            appUserRepo.save(user);
+            AppUser userAdmin = new AppUser("admin", pe.encode("adminpw"), new String[]{"ROLE_ADMIN", "ROLE_USER"}, "Admin", "admin@email.com", "admin address");
+            AppUser userNormal = new AppUser("user1", pe.encode("user1pw"), new String[]{"ROLE_USER"}, "User1", "user1@email.com", "user1 address");
+            appUserRepo.save(userAdmin);
+            appUserRepo.save(userNormal);
         }
     }
 
