@@ -238,18 +238,14 @@ public class UserManagementController {
 
     @PostMapping("/update")
     public String updateUser(@Valid RegisterUserForm form, BindingResult result, Principal principal) {
-        System.out.println("Updating user...");
-        // Fetch the current user
         AppUser currentUser = umService.getAppUser(form.getUsername());
-        // Check if the current password is correct
+
         if (!passwordEncoder.matches(form.getCurrentPassword(), currentUser.getPassword())) {
             result.rejectValue("currentPassword", "error.currentPassword", "Current password is incorrect");
         }
-        // Check if the new password and confirm password match
         if (!form.getNewPassword().equals(form.getConfirmPassword())) {
             result.rejectValue("confirmPassword", "error.confirmPassword", "Passwords do not match");
         }
-        // Check if the new password is the same as the old password
         if (passwordEncoder.matches(form.getNewPassword(), currentUser.getPassword())) {
             result.rejectValue("newPassword", "error.newPassword", "New password is the same as the old password");
         }

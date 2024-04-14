@@ -5,32 +5,65 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-<nav>
-    <c:url var="logoutUrl" value="/logout" />
-    <form action="${logoutUrl}" method="post">
-        <input type="submit" value="Logout" />
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    </form>
-
-    <security:authorize access="isAuthenticated()">
-        <c:url var="userUrl" value="/user/own/${principal.name}" />
-        <a href="${userUrl}">User Page</a>
-    </security:authorize>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/OnlineBookStore/">Online Book Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <security:authorize access="isAuthenticated()">
+                <li class="nav-item">
+                    <c:url var="userUrl" value="/user/own/${principal.name}" />
+                    <a class="nav-link" href="${userUrl}">User Page</a>
+                </li>
+                <li class="nav-item">
+                    <c:url var="logoutUrl" value="/logout" />
+                    <form class="form-inline" action="${logoutUrl}" method="post">
+                        <input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Logout" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    </form>
+                </li>
+            </security:authorize>
+            <security:authorize access="isAnonymous()">
+                <li class="nav-item">
+                    <c:url var="loginUrl" value="/login" />
+                    <a class="btn btn-outline-success my-2 my-sm-0" href="${loginUrl}">Login</a>
+                </li>
+            </security:authorize>
+        </ul>
+    </div>
 </nav>
-<h2>Edit Book #${book.id}</h2>
-<form:form method="POST" enctype="multipart/form-data" modelAttribute="bookForm">
-    <form:label path="title">Title</form:label><br/>
-    <form:input type="text" path="title"/><br/><br/>
-    <form:label path="author">Author</form:label><br/>
-    <form:input type="text" path="author"/><br/><br/>
-    <form:label path="description">Description</form:label><br/>
-    <form:textarea rows="5" cols="30" path="description"/><br/><br/>
-    <form:label path="stock">Stock</form:label><br/>
-    <form:input type="text" path="stock"/><br/><br/>
-    <form:label path="price">Price</form:label><br/>
-    <form:input type="text" path="price"/><br/><br/>
-    <input type="submit" value="Save"/><br/><br/>
-</form:form>
-<a href="<c:url value="/book"/>">Return to book list</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Edit Book #${book.id}</h2>
+            <form:form method="POST" enctype="multipart/form-data" modelAttribute="bookForm" class="d-flex flex-column align-items-start">
+                <div class="form-group">
+                    <form:label path="title">Title</form:label>
+                    <form:input type="text" path="title" cssClass="form-control"/>
+                </div>
+                <div class="form-group">
+                    <form:label path="author">Author</form:label>
+                    <form:input type="text" path="author" cssClass="form-control"/>
+                </div>
+                <div class="form-group">
+                    <form:label path="description">Description</form:label>
+                    <form:textarea rows="5" cols="30" path="description" cssClass="form-control" style="resize: none;"/>
+                </div>
+                <div class="form-group">
+                    <form:label path="stock">Stock</form:label>
+                    <form:input type="text" path="stock" cssClass="form-control"/>
+                </div>
+                <div class="form-group">
+                    <form:label path="price">Price</form:label>
+                    <form:input type="text" path="price" cssClass="form-control"/>
+                </div>
+                <input type="submit" value="Save" class="btn btn-primary mt-3"/>
+            </form:form>
+            <a href="<c:url value="/book"/>" class="btn btn-secondary mt-3">Return to book list</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

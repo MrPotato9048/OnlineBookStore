@@ -5,49 +5,84 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-<nav>
-    <c:url var="logoutUrl" value="/logout" />
-    <form action="${logoutUrl}" method="post">
-        <input type="submit" value="Logout" />
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    </form>
-
-    <security:authorize access="isAuthenticated()">
-        <c:url var="userUrl" value="/user/own/${principal.name}" />
-        <a href="${userUrl}">User Page</a>
-    </security:authorize>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/OnlineBookStore/">Online Book Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <security:authorize access="isAuthenticated()">
+                <li class="nav-item">
+                    <c:url var="userUrl" value="/user/own/${principal.name}" />
+                    <a class="nav-link" href="${userUrl}">User Page</a>
+                </li>
+                <li class="nav-item">
+                    <c:url var="logoutUrl" value="/logout" />
+                    <form class="form-inline" action="${logoutUrl}" method="post">
+                        <input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Logout" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    </form>
+                </li>
+            </security:authorize>
+            <security:authorize access="isAnonymous()">
+                <li class="nav-item">
+                    <c:url var="loginUrl" value="/login" />
+                    <a class="btn btn-outline-success my-2 my-sm-0" href="${loginUrl}">Login</a>
+                </li>
+            </security:authorize>
+        </ul>
+    </div>
 </nav>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center">${appUser.fullName}'s User Page</h2>
+            <a href="<c:url value="/user/edit/${appUser.username}"/>" class="btn btn-primary mb-3">Edit</a>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Username</th>
+                        <td>${appUser.username}</td>
+                    </tr>
+                    <tr>
+                        <th>Email Address</th>
+                        <td>${appUser.emailAddress}</td>
+                    </tr>
+                    <tr>
+                        <th>Delivery Address</th>
+                        <td>${appUser.deliveryAddress}</td>
+                    </tr>
+                    <security:authorize access="hasRole('ADMIN')">
+                        <tr>
+                            <th>Roles</th>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <c:forEach var="role" items="${appUser.roles}">
+                                        <li>${role.role}</li>
+                                    </c:forEach>
+                                </ul>
+                            </td>
+                        </tr>
+                    </security:authorize>
+                </tbody>
+            </table>
 
-
-
-<h1>${appUser.fullName}'s User Page</h1>
-[<a href="<c:url value="/user/edit/${principal.name}"/>">Edit</a>]
-<p><strong>Username:</strong> ${appUser.username}</p>
-<p><strong>Email Address:</strong> ${appUser.emailAddress}</p>
-<p><strong>Delivery Address:</strong> ${appUser.deliveryAddress}</p>
-<security:authorize access="hasRole('ADMIN')">
-    <p><strong>Roles:</strong></p>
-    <ul>
-        <c:forEach var="role" items="${appUser.roles}">
-            <li>${role}</li>
-        </c:forEach>
-    </ul>
-</security:authorize>
-
-
-
-
-<p><strong>Favorite Books:</strong><br/>
-<c:choose>
-    <c:when test="${fn:length(favoriteBooks) == 0}">
-    <i>There are no books in the favorite Books.</i>
-    </c:when>
-    <c:otherwise>
-        <c:forEach items="${favoriteBooks}" var="favoriteBook">
-                <li>${favoriteBook.book.title}</li>
-        </c:forEach>
-    </c:otherwise>
-</c:choose>
-
+            <p><strong>Favorite Books:</strong></p>
+            <c:choose>
+                <c:when test="${fn:length(favoriteBooks) == 0}">
+                    <p class="text-muted">There are no books in the favorite Books.</p>
+                </c:when>
+                <c:otherwise>
+                    <ul class="list-unstyled">
+                        <c:forEach items="${favoriteBooks}" var="favoriteBook">
+                            <li>${favoriteBook.book.title}</li>
+                        </c:forEach>
+                    </ul>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+</div>
 </body>
 </html>
