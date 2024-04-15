@@ -48,16 +48,20 @@ public class UserManagementService {
     @Transactional
     public void updateAppUser(String username, String newPassword, String[] roles, String fullName, String emailAddress, String deliveryAddress) {
         AppUser user = getAppUser(username);
-        user.setPassword(pe.encode(newPassword));
+        if (!newPassword.equals(user.getPassword())) {
+            user.setPassword(pe.encode(newPassword));
+        } else {
+            user.setPassword(newPassword);
+        }
         user.setFullName(fullName);
         user.setEmailAddress(emailAddress);
         user.setDeliveryAddress(deliveryAddress);
-
+    
         List<UserRole> selectedRoles = Arrays.stream(roles).map(role -> getUserRole(username, role)).collect(Collectors.toList());
-
+    
         user.getRoles().removeIf(role -> !selectedRoles.contains(role));
         selectedRoles.stream().filter(role -> !user.getRoles().contains(role)).forEach(user.getRoles()::add);
-
+    
         appUserRepo.save(user);
     }
 

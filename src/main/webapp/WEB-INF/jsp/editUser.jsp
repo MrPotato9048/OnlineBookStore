@@ -50,35 +50,19 @@
     </div>
 </nav>
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2 class="text-center">Edit User Account</h2>
-            <form:form method="POST" action="/OnlineBookStore/user/update" modelAttribute="registerUserForm" class="form-group">
+            <h2 class="text-center">Edit Personal Information</h2>
+            <form:form method="POST" action="/OnlineBookStore/user/updateInfo" modelAttribute="infoForm" class="form-group">
                 <div class="form-group">
-                    <form:label path="username">Username</form:label>
-                    <form:errors path="username" cssClass="error" />
                     <security:authorize access="hasRole('ADMIN')">
+                        <form:label path="username">Username</form:label>
+                        <form:errors path="username" cssClass="error" />
                         <form:input type="text" value="${appUser.username}" path="username" class="form-control"/>
                     </security:authorize>
                     <security:authorize access="!hasRole('ADMIN')">
-                        ${appUser.username}
                         <form:hidden path="username" value="${appUser.username}" />
                     </security:authorize>
-                </div>
-                <div class="form-group">
-                    <form:label path="currentPassword">Current Password</form:label>
-                    <form:errors path="currentPassword" cssClass="error" />
-                    <form:password path="currentPassword" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <form:label path="newPassword">New Password</form:label>
-                    <form:errors path="newPassword" cssClass="error" />
-                    <form:password path="newPassword" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <form:label path="confirmPassword">Confirm New Password</form:label>
-                    <form:errors path="confirmPassword" cssClass="error" />
-                    <form:password path="confirmPassword" class="form-control" />
                 </div>
                 <div class="form-group">
                     <form:label path="fullName">Full Name</form:label><br/>
@@ -110,6 +94,31 @@
                 </security:authorize>
                 <div class="form-group">
                     <input type="submit" value="Update User" class="btn btn-primary"/>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </div>
+            </form:form>
+            <h2>Edit password</h2>
+            <form:form method="POST" action="/OnlineBookStore/user/updatePassword" modelAttribute="passwordForm" class="form-group">
+                <div class="form-group">
+                    <form:hidden path="username" value="${appUser.username}" />
+                </div>
+                <div class="form-group">
+                    <form:label path="currentPassword">Current Password</form:label>
+                    <form:errors path="currentPassword" cssClass="error" />
+                    <form:password path="currentPassword" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <form:label path="newPassword">New Password</form:label>
+                    <form:errors path="newPassword" cssClass="error" />
+                    <form:password path="newPassword" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <form:label path="confirmPassword">Confirm New Password</form:label>
+                    <form:errors path="confirmPassword" cssClass="error" />
+                    <form:password path="confirmPassword" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Update Password" class="btn btn-primary"/>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </div>
             </form:form>

@@ -59,7 +59,7 @@
                     <tr>
                         <td>${item.book.title}</td>
                         <td>${item.quantity}</td>
-                        <td>$${item.totalPrice}</td>
+                        <td><fmt:formatNumber type="currency" currencySymbol="$" value="${item.totalPrice}" /></td>
                     </tr>
                 </c:forEach>
                 <tr>
@@ -72,6 +72,7 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <button type="submit" class="btn btn-primary">Confirm Checkout</button>
             </form>
+            <a href="<c:url value='/shoppingCart' />" class="btn btn-secondary mt-2">Return</a>
         </c:if>
         <c:if test="${empty shoppingCartItems}">
             <div class="mt-auto">

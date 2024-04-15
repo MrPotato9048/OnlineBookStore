@@ -43,7 +43,7 @@
     </div>
 </nav>
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-md-10">
             <h2>Users</h2>
             <a href="<c:url value="/user/create" />" class="btn btn-primary mb-3">Create a User</a>

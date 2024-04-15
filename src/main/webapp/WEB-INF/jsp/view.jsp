@@ -67,7 +67,7 @@
             </tr>
             <tr>
                 <th>Price</th>
-                <td>$${book.price}</td>
+                <td><fmt:formatNumber type="currency" currencySymbol="$" value="${book.price}" /></td>
             </tr>
         </tbody>
     </table>
@@ -85,11 +85,18 @@
     </c:choose>
     <security:authorize access="isAuthenticated()">
         <div style="display: flex; justify-content: space-between;">
-            <form action="<c:url value='/shoppingCart/add/${book.id}'/>" method="post">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <input type="hidden" name="quantity" value="1"/>
-                <input type="submit" value="Add to Cart" class="btn btn-primary"/>
-            </form>
+            <c:choose>
+                <c:when test="${book.stock < 1}">
+                    <button class="btn btn-secondary" disabled>Add to Cart</button>
+                </c:when>
+                <c:otherwise>
+                    <form action="<c:url value='/shoppingCart/add/${book.id}'/>" method="post">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        <input type="hidden" name="quantity" value="1"/>
+                        <input type="submit" value="Add to Cart" class="btn btn-primary"/>
+                    </form>
+                </c:otherwise>
+            </c:choose>
             <c:choose>
                 <c:when test="${isFavorite}">
                     <form action="<c:url value='/favorite/remove/${book.id}'/>" method="post">

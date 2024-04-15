@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Online Book Store - User Page (${principal.name})</title>
+    <title>Online Book Store - Personal Information (${principal.name})</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
@@ -43,9 +43,9 @@
     </div>
 </nav>
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2 class="text-center">${appUser.fullName}'s User Page</h2>
+            <h2 class="text-center">${appUser.fullName}'s Personal Information</h2>
             <a href="<c:url value="/user/edit/${appUser.username}"/>" class="btn btn-primary mb-3">Edit</a>
             <table class="table">
                 <tbody>

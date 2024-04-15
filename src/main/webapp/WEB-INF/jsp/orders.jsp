@@ -64,15 +64,17 @@
                     </c:forEach>
                     <tr>
                         <th>Order Total:</th>
-                        <td>$${order.totalPrice}</td>
+                        <td><fmt:formatNumber type="currency" currencySymbol="$" value="${order.totalPrice}" /></td>
                     </tr>
                 </table>
             </c:forEach>
+            <a href="<c:url value='/book/list' />" class="btn btn-secondary mt-2">Continue Shopping</a>
         </c:if>
         <c:if test="${empty orders}">
             <div class="mt-auto">
                 <p class="text-muted">You have no orders.</p>
             </div>
+            <a href="<c:url value='/book/list' />" class="btn btn-secondary mt-2">Return</a>
         </c:if>
     </div>
 </div>

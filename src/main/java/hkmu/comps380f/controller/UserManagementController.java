@@ -104,15 +104,9 @@ public class UserManagementController {
         public void setDeliveryAddress(String deliveryAddress) { this.deliveryAddress = deliveryAddress; }
     }
 
-    public static class RegisterUserForm {
+    public static class infoForm {
         @NotEmpty(message = "Please enter your user name.")
         private String username;
-        @NotEmpty(message = "Please enter your current password.")
-        private String currentPassword;
-        @NotEmpty(message = "Please enter your new password.")
-        @Size(min = 6, max = 15, message = "Your password length must be between {min} and {max}.")
-        private String newPassword;
-        private String confirmPassword;
         @NotEmpty(message = "Please select at least one role.")
         private String[] roles;
         @NotEmpty(message = "Please enter your full name.")
@@ -128,30 +122,6 @@ public class UserManagementController {
 
         public void setUsername(String username) {
             this.username = username;
-        }
-
-        public String getCurrentPassword() {
-            return currentPassword;
-        }
-
-        public void setCurrentPassword(String currentPassword) {
-            this.currentPassword = currentPassword;
-        }
-
-        public String getNewPassword() {
-            return newPassword;
-        }
-
-        public void setNewPassword(String newPassword) {
-            this.newPassword = newPassword;
-        }
-
-        public String getConfirmPassword() {
-            return confirmPassword;
-        }
-
-        public void setConfirmPassword(String confirmPassword) {
-            this.confirmPassword = confirmPassword;
         }
 
         public String[] getRoles() {
@@ -184,6 +154,48 @@ public class UserManagementController {
 
         public void setDeliveryAddress(String deliveryAddress) {
             this.deliveryAddress = deliveryAddress;
+        }
+    }
+
+    public static class passwordForm {
+        private String username;
+        @NotEmpty(message = "Please enter your current password.")
+        private String currentPassword;
+        @NotEmpty(message = "Please enter your new password.")
+        @Size(min = 6, max = 15, message = "Your password length must be between {min} and {max}.")
+        private String newPassword;
+        private String confirmPassword;
+
+        public String getUsername() {
+            return username;
+        }
+        
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getCurrentPassword() {
+            return currentPassword;
+        }
+
+        public void setCurrentPassword(String currentPassword) {
+            this.currentPassword = currentPassword;
+        }
+
+        public String getNewPassword() {
+            return newPassword;
+        }
+
+        public void setNewPassword(String newPassword) {
+            this.newPassword = newPassword;
+        }
+
+        public String getConfirmPassword() {
+            return confirmPassword;
+        }
+
+        public void setConfirmPassword(String confirmPassword) {
+            this.confirmPassword = confirmPassword;
         }
     }
 
@@ -229,34 +241,55 @@ public class UserManagementController {
     @GetMapping("/edit/{username}")
     public String editUser(@PathVariable("username") String username, Principal principal, ModelMap model) {
         AppUser appUser = umService.getAppUser(username);
-        RegisterUserForm form = new RegisterUserForm();
+        infoForm info = new infoForm();
+        passwordForm password = new passwordForm();
         model.addAttribute("appUser", appUser);
-        model.addAttribute("registerUserForm", form);
+        model.addAttribute("infoForm", info);
+        model.addAttribute("passwordForm", password);
         model.addAttribute("principal", principal);
         return "editUser";
     }
 
-    @PostMapping("/update")
-    public String updateUser(@Valid RegisterUserForm form, BindingResult result, Principal principal) {
-        AppUser currentUser = umService.getAppUser(form.getUsername());
+    @PostMapping("/updateInfo")
+    public String updateInfo(@Valid infoForm infoForm, BindingResult result, Principal principal, ModelMap model) {
+        AppUser currentUser = umService.getAppUser(infoForm.getUsername());
 
-        if (!passwordEncoder.matches(form.getCurrentPassword(), currentUser.getPassword())) {
-            result.rejectValue("currentPassword", "error.currentPassword", "Current password is incorrect");
-        }
-        if (!form.getNewPassword().equals(form.getConfirmPassword())) {
-            result.rejectValue("confirmPassword", "error.confirmPassword", "Passwords do not match");
-        }
-        if (passwordEncoder.matches(form.getNewPassword(), currentUser.getPassword())) {
-            result.rejectValue("newPassword", "error.newPassword", "New password is the same as the old password");
-        }
         if (result.hasErrors()) {
+            model.addAttribute("infoForm", infoForm);
+            model.addAttribute("passwordForm", new passwordForm());
+            model.addAttribute("appUser", currentUser);
+            model.addAttribute("principal", principal);
             return "editUser";
         }
-        List<UserRole> selectedRoles = Arrays.stream(form.getRoles()).map(role -> umService.getUserRole(currentUser.getUsername(), role)).collect(Collectors.toList());
+        List<UserRole> selectedRoles = Arrays.stream(infoForm.getRoles()).map(role -> umService.getUserRole(currentUser.getUsername(), role)).collect(Collectors.toList());
         currentUser.getRoles().removeIf(role -> !selectedRoles.contains(role));
         selectedRoles.stream().filter(role -> !currentUser.getRoles().contains(role)).forEach(currentUser.getRoles()::add);
         String[] currentRolesArray = selectedRoles.stream().map(UserRole::getRole).toArray(String[]::new);
-        umService.updateAppUser(form.getUsername(), form.getNewPassword(), currentRolesArray, form.getFullName(), form.getEmailAddress(), form.getDeliveryAddress());
-        return "redirect:/user/own/" + principal.getName();
+        umService.updateAppUser(infoForm.getUsername(), currentUser.getPassword(), currentRolesArray, infoForm.getFullName(), infoForm.getEmailAddress(), infoForm.getDeliveryAddress());
+        return "redirect:/user/own/" + currentUser.getUsername();
+    }
+
+    @PostMapping("/updatePassword")
+    public String updatePassword(@Valid passwordForm passForm, BindingResult result, Principal principal, ModelMap model) {
+        AppUser currentUser = umService.getAppUser(passForm.getUsername());
+
+        if (!passwordEncoder.matches(passForm.getCurrentPassword(), currentUser.getPassword())) {
+            result.rejectValue("currentPassword", "error.currentPassword", "Current password is incorrect");
+        }
+        if (!passForm.getNewPassword().equals(passForm.getConfirmPassword())) {
+            result.rejectValue("confirmPassword", "error.confirmPassword", "Passwords do not match");
+        }
+        if (passwordEncoder.matches(passForm.getNewPassword(), currentUser.getPassword())) {
+            result.rejectValue("newPassword", "error.newPassword", "New password is the same as the old password");
+        }
+        if (result.hasErrors()) {
+            model.addAttribute("passwordForm", passForm);
+            model.addAttribute("infoForm", new infoForm());
+            model.addAttribute("appUser", currentUser);
+            model.addAttribute("principal", principal);
+            return "editUser";
+        }
+        umService.updateAppUser(currentUser.getUsername(), passForm.getNewPassword(), currentUser.getRoles().stream().map(UserRole::getRole).toArray(String[]::new), currentUser.getFullName(), currentUser.getEmailAddress(), currentUser.getDeliveryAddress());
+        return "redirect:/user/own/" + currentUser.getUsername();
     }
 }

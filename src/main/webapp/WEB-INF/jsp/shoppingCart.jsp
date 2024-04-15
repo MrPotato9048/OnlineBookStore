@@ -60,7 +60,7 @@
                     <tr>
                         <td>${item.book.title}</td>
                         <td>${item.quantity}</td>
-                        <td>$${itemTotalPrices[status.index]}</td>
+                        <td><fmt:formatNumber type="currency" currencySymbol="$" value="${itemTotalPrices[status.index]}" /></td>
                         <td>
                             <form action="<c:url value='/shoppingCart/remove/${item.book.id}' />" method="post">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -79,11 +79,13 @@
             <form action="<c:url value='/shoppingCart/checkout' />" method="get">
                 <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
             </form>
+            <a href="<c:url value='/book/list' />" class="btn btn-secondary mt-2">Continue Shopping</a>
         </c:if>
         <c:if test="${empty shoppingCart.shoppingCartItems}">
             <div class="mt-auto">
                 <p class="text-muted">Your shopping cart is empty.</p>
             </div>
+            <a href="<c:url value='/book/list' />" class="btn btn-secondary mt-2">Return</a>
         </c:if>
     </div>
 </div>
