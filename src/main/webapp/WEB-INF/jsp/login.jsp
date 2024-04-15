@@ -17,9 +17,6 @@
             <c:if test="${param.error != null}">
                 <div class="alert alert-danger" role="alert">Login failed.</div>
             </c:if>
-            <c:if test="${param.logout != null}">
-                <div class="alert alert-success" role="alert">You have logged out.</div>
-            </c:if>
             <h2 class="text-center">Login</h2>
             <form action="login" method="POST" class="d-flex flex-column align-items-center">
                 <div class="form-group">

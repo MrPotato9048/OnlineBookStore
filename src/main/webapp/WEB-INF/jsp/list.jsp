@@ -49,6 +49,9 @@
     </div>
 </nav>
 <div class="container">
+    <c:if test="${param.logout != null}">
+        <div class="alert alert-success" role="alert">You have logged out.</div>
+    </c:if>
     <h2>Books</h2>
     <security:authorize access="hasRole('ADMIN')">
         <a href="<c:url value="/user/" />" class="btn btn-primary">Manage User Accounts</a><br/><br/>

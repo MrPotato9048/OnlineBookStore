@@ -35,7 +35,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/book/list?logout")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 )
